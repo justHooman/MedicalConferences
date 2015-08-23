@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Medical Conferences</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="signin_msg">You need sign in to use app</string>
+    <string name="signin_google_title">SignIn use with Google account</string>
+    <string name="signingin">Signing in</string>
+    <string name="signout">Sign Out</string>
+</resources>
