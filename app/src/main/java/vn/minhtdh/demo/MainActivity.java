@@ -5,6 +5,7 @@ import android.content.IntentSender;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,8 +20,13 @@ import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
+import java.lang.ref.WeakReference;
+
 import vn.minhtdh.demo.db.DbHelper;
 import vn.minhtdh.demo.db.DbUtils;
+import vn.minhtdh.demo.feature.admin.AdminFrag;
+import vn.minhtdh.demo.feature.conference.ConferencesFrag;
+import vn.minhtdh.demo.frag.BaseFrag;
 import vn.minhtdh.demo.frag.DrawerFrag;
 import vn.minhtdh.demo.frag.ProgressFrag;
 import vn.minhtdh.demo.model.User;
@@ -103,18 +109,52 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.sign_in_button) {
-            onSignInClicked(v);
-        } else if (v.getId() == R.id.sign_out_button) {
-            if (mGoogleApiClient.isConnected()) {
-                Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-                mGoogleApiClient.disconnect();
-                if (mDrawerFrag != null) {
-                    mDrawerFrag.setUser(null);
+        switch (v.getId()) {
+            case R.id.sign_in_button:
+                onSignInClicked(v);
+                break;
+            case R.id.sign_out_button:
+                if (mGoogleApiClient.isConnected()) {
+                    Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+                    mGoogleApiClient.disconnect();
                 }
-            }
+                showSignedOutUI();
+                break;
+            case R.id.btn_admin:
+                onAdminClick(v);
+                break;
+            case R.id.btn_conference:
+                onConferenceClick(v);
+                break;
+            default:
+                break;
         }
+    }
 
+    private void onAdminClick(View v) {
+        Log.d(TAG, "onAdminClick");
+        AdminFrag frag = new AdminFrag();
+        BaseFrag.Option opt = frag.generateDefaultOption();
+        opt.setPlaceHolder(R.id.main_content);
+        opt.action = BaseFrag.Option.ACTION_REPLACE;
+        opt.addBackStack = false;
+        frag.move(getSupportFragmentManager(), frag, opt);
+    }
+
+    private void onConferenceClick(View v) {
+        Log.d(TAG, "onConferenceClick");
+        ConferencesFrag frag = new ConferencesFrag();
+        BaseFrag.Option opt = frag.generateDefaultOption();
+        opt.setPlaceHolder(R.id.main_content);
+        opt.action = BaseFrag.Option.ACTION_REPLACE;
+        opt.addBackStack = false;
+        frag.move(getSupportFragmentManager(), frag, opt);
+    }
+
+    private void showSignedOutUI() {
+        if (mDrawerFrag != null) {
+            mDrawerFrag.setUser(null, null);
+        }
     }
 
     ProgressFrag mProgressFrag;
@@ -148,14 +188,13 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         }
     }
 
-    public void onSignInClicked(View v) {
+    private void onSignInClicked(View v) {
         // User clicked the sign-in button, so begin the sign-in process and automatically
         // attempt to resolve any errors that occur.
         mShouldResolve = true;
         mGoogleApiClient.connect();
 
         // Show a message to the user that we are signing in.
-//        mTitle.setText("Signing In");
         showSigninProgress();
     }
 
@@ -182,12 +221,13 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
                 Log.d(TAG, "onConnectionFailed: error dialog" + connectionResult);
 //                showErrorDialog(connectionResult);
+                // TODO
             }
         } else {
             // Show the signed-out UI
 
             Log.d(TAG, "onConnectionFailed: signout ui" + connectionResult);
-//            showSignedOutUI();
+            showSignedOutUI();
         }
     }
 
@@ -211,14 +251,9 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 String personName = currentPerson.getDisplayName();
                 user.displayName = personName;
                 if (mDrawerFrag != null) {
-                    mDrawerFrag.setUser(user);
+                    mDrawerFrag.setUser(user, currentPerson);
                 }
-//                if (currentPerson.hasImage()) {
-//                    String personPhoto = currentPerson.getImage().getUrl();
-//                }
-//                String personGooglePlusProfile = currentPerson.getUrl();
             }
-
         }
 
     }
