@@ -1,6 +1,7 @@
 package vn.minhtdh.demo.feature.conference;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,8 @@ import vn.minhtdh.demo.R;
 import vn.minhtdh.demo.feature.topic.TopicFrag;
 import vn.minhtdh.demo.feature.user.ParticipantsFrag;
 import vn.minhtdh.demo.frag.BaseToolBarFrag;
+import vn.minhtdh.demo.frag.EventFrag;
+import vn.minhtdh.demo.model.Conference;
 
 /**
  * Created by exoplatform on 8/24/15.
@@ -24,15 +27,25 @@ public class ConferenceDetailFrag extends BaseToolBarFrag {
     public static final int MODE_ADMIN = 1;
 
     public int mode = MODE_NORMAL;
+    Conference conference;
 
     @Override
     public View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.conference_detail_frag, container, false);
+
         ViewPager vp = (ViewPager) v.findViewById(R.id.vpContent);
         vp.setAdapter(new PagerAdapter(getChildFragmentManager()));
         TabLayout tl = (TabLayout) v.findViewById(R.id.tabs);
         tl.setupWithViewPager(vp);
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        EventFrag frag = new EventFrag();
+        frag.editable = false;
+        getChildFragmentManager().beginTransaction().add(R.id. event_content, frag).commit();
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {
