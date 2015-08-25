@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Location">
+
+        <ViewStub
+            android:id="@+id/stubLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/tvLocation" />
+    </android.support.design.widget.TextInputLayout>
+
+    <fragment
+        android:id="@+id/timeStart"
+        android:name="vn.minhtdh.demo.frag.DateTimeFrag"
+        class="vn.minhtdh.demo.frag.DateTimeFrag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/cmn_space" />
+
+    <fragment
+        android:id="@+id/timeEnd"
+        android:name="vn.minhtdh.demo.frag.DateTimeFrag"
+        class="vn.minhtdh.demo.frag.DateTimeFrag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/cmn_space" />
+</LinearLayout>
