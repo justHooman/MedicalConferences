@@ -12,6 +12,7 @@ import java.util.Set;
 
 import vn.minhtdh.demo.model.Conference;
 import vn.minhtdh.demo.model.Participant;
+import vn.minhtdh.demo.model.Topic;
 import vn.minhtdh.demo.model.User;
 import vn.minhtdh.demo.utils.Contanst;
 
@@ -25,7 +26,7 @@ public class DbUtils {
         StringBuilder bld = new StringBuilder();
 
         SqlBuilder insertSql(String table, ContentValues cv) {
-            bld.append("INSERT INTO ").append(table);
+            bld.append("INSERT OR IGNORE INTO ").append(table);
             if (cv.size() > 0) {
                 Set<Map.Entry<String, Object>> sets = cv.valueSet();
                 StringBuilder colBld = new StringBuilder();
@@ -47,6 +48,18 @@ public class DbUtils {
                 }
                 bld.append(colBld).append(") ").append(valBld)
                         .append(")");
+            }
+            return this;
+        }
+
+        SqlBuilder whereQuery(String... colsName) {
+            boolean notFirst = false;
+            for (String col : colsName) {
+                if (notFirst) {
+                    bld.append(" and ");
+                }
+                bld.append(col).append("=?");
+                notFirst = true;
             }
             return this;
         }
@@ -202,5 +215,76 @@ public class DbUtils {
         return true;
     }
 
+    public long insertTopic(SQLiteDatabase db, Topic topic) {
+        ContentValues cv= new ContentValues();
+        cv.put(DbHelper.TOPIC_TITLE, topic.title);
+        cv.put(DbHelper.TOPIC_CONTENT, topic.content);
+        cv.put(DbHelper.CONFERENCE_ID, topic.conferenceId);
+        cv.put(DbHelper.TOPIC_STATUS, topic.status);
+        cv.put(DbHelper.LOCATION, topic.location);
+        cv.put(DbHelper.TIME_START, topic.timeStart);
+        cv.put(DbHelper.TIME_END, topic.timeEnd);
+        String sql = new SqlBuilder().insertSql(DbHelper.TABLE_CONFERENCE, cv).build();
+        SQLiteStatement statement =  db.compileStatement(sql);
+        return statement.executeInsert();
+    }
+
+    public List<Topic> getTopics(SQLiteDatabase db, long confernceId, int status) {
+        List<Topic> ret = null;
+        Cursor c = db.query(DbHelper.TABLE_TOPIC, null, new SqlBuilder().whereQuery(DbHelper.CONFERENCE_ID, DbHelper.TOPIC_STATUS).build(), new String[]{String.valueOf(confernceId), String.valueOf(status)}, null, null, null);
+        if (c != null) {
+            if (c.moveToFirst()) {
+                Topic item = null;
+                ret = new ArrayList<Topic>();
+                ArrayHolder holder = new ArrayHolder();
+                do {
+                    item = readTopic(holder, c);
+                    ret.add(item);
+                } while (c.moveToNext());
+            }
+            c.close();
+        }
+        return ret;
+    }
+
+    public Topic readTopic(ArrayHolder holder, Cursor c) {
+        Topic ret = null;
+        int[] colIds = holder.colIds;
+        if (colIds == null) {
+            colIds = new int[7];// number of col in user table
+            colIds[0] = c.getColumnIndex(DbHelper.TOPIC_ID);
+            colIds[1] = c.getColumnIndex(DbHelper.TOPIC_TITLE);
+            colIds[2] = c.getColumnIndex(DbHelper.LOCATION);
+            colIds[3] = c.getColumnIndex(DbHelper.TIME_START);
+            colIds[4] = c.getColumnIndex(DbHelper.TIME_END);
+            colIds[5] = c.getColumnIndex(DbHelper.CONFERENCE_ID);
+            colIds[6] = c.getColumnIndex(DbHelper.TOPIC_CONTENT);
+            holder.colIds = colIds;
+        }
+        ret = new Topic();
+        final int UNKNOW_COL = -1;
+        if (colIds[0] != UNKNOW_COL) {
+            ret.setTopicId(c.getLong(colIds[0]));
+        }
+        if (colIds[1] != UNKNOW_COL) {
+            ret.title = c.getString(colIds[1]);
+        }
+        if (colIds[2] != UNKNOW_COL) {
+            ret.location = c.getString(colIds[2]);
+        }
+        if (colIds[3] != UNKNOW_COL) {
+            ret.timeStart = c.getLong(colIds[3]);
+        }
+        if (colIds[4] != UNKNOW_COL) {
+            ret.timeEnd = c.getLong(colIds[4]);
+        }
+        if (colIds[5] != UNKNOW_COL) {
+            ret.conferenceId = c.getLong(colIds[5]);
+        }
+        if (colIds[6] != UNKNOW_COL) {
+            ret.content = c.getString(colIds[6]);
+        }
+        return ret;
+    }
 
 }

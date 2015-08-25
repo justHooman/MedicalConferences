@@ -45,7 +45,7 @@ public abstract class BaseToolBarFrag extends BaseFrag {
         }
     }
 
-    public static abstract class BaseListFrag<E> extends BaseToolBarFrag implements View.OnClickListener, LoaderManager.LoaderCallbacks<E> {
+    public static abstract class BaseListFrag<E> extends BaseToolBarFrag implements LoaderManager.LoaderCallbacks<E> {
 
         public int getLayoutId() {
             return R.layout.rv_with_fab;
@@ -68,7 +68,7 @@ public abstract class BaseToolBarFrag extends BaseFrag {
             mRv = new WeakReference<RecyclerView>(rv);
 
             FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fabAdd);
-            fab.setOnClickListener(this);
+            fab.setOnClickListener(mFabClickListener);
             mFab = new WeakReference<FloatingActionButton>(fab);
             return v;
         }
@@ -83,8 +83,14 @@ public abstract class BaseToolBarFrag extends BaseFrag {
 
         }
 
-        @Override
-        public void onClick(View v) {
+        private View.OnClickListener mFabClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFabClick(v);
+            }
+        };
+
+        protected void onFabClick(View v) {
 
         }
 

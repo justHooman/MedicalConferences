@@ -45,6 +45,7 @@ public class ConferenceDetailFrag extends BaseToolBarFrag {
         super.onViewCreated(view, savedInstanceState);
         EventFrag frag = new EventFrag();
         frag.editable = false;
+        frag.event = conference;
         getChildFragmentManager().beginTransaction().add(R.id. event_content, frag).commit();
     }
 

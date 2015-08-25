@@ -9,6 +9,8 @@ public class Topic extends Event {
     public long topicId;
     public String title;
     public String content;
+    public long conferenceId;
+    public int status;
     public ArrayList<User> hosts;
 
     public void setTopicId(final long pTopicId) {

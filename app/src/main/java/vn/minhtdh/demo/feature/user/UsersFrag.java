@@ -57,26 +57,23 @@ public class UsersFrag extends BaseToolBarFrag.BaseListFrag<List<User>> {
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.fabAdd) {
-            final InputAlertDlg dlg = new InputAlertDlg();
-            dlg.cs = getString(R.string.input_user_title);
-            dlg.mListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    CharSequence mail = dlg.getText();
-                    if (Utils.notEmpty(mail)) {
-                        User user = new User();
-                        user.userMail = mail.toString();
-                        new DbUtils().insertUser(DbHelper.getIns().getWritableDatabase(), user);
-                        UsersFrag.this.resetData();
-                    }
+    protected void onFabClick(View v) {
+        super.onFabClick(v);
+        final InputAlertDlg dlg = new InputAlertDlg();
+        dlg.cs = getString(R.string.input_user_title);
+        dlg.mListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                CharSequence mail = dlg.getText();
+                if (Utils.notEmpty(mail)) {
+                    User user = new User();
+                    user.userMail = mail.toString();
+                    new DbUtils().insertUser(DbHelper.getIns().getWritableDatabase(), user);
+                    UsersFrag.this.resetData();
                 }
-            };
-            dlg.show(getChildFragmentManager(), "add users");
-        } else {
-            super.onClick(v);
-        }
+            }
+        };
+        dlg.show(getChildFragmentManager(), "add users");
     }
 
     public static class InputAlertDlg extends BaseDialogFrag {

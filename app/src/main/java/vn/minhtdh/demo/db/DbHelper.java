@@ -122,12 +122,15 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TOPIC_ID = "topicId";
     public static final String TOPIC_TITLE = "title";
     public static final String TOPIC_CONTENT = "content";
+    public static final String TOPIC_STATUS = "status";
     public static final String TABLE_TOPIC_CREATE_SQL;
     static {
         SqlTableBuilder bld = new SqlTableBuilder().createTable(TABLE_TOPIC)
                 .addNumKeyAutoIncreament(TOPIC_ID)
                 .addTextCol(TOPIC_TITLE)
                 .addTextCol(TOPIC_CONTENT)
+                .addNumCol(CONFERENCE_ID)
+                .addNumCol(TOPIC_STATUS)
                 .addTextCol(LOCATION)
                 .addNumCol(TIME_START)
                 .addNumCol(TIME_END)

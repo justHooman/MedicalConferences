@@ -6,10 +6,18 @@ import vn.minhtdh.demo.model.User;
  * Created by minhtdh on 8/23/15.
  */
 public class Contanst {
+    public static final int UNKNOW_ID = -1;
+
     public static class ParticipantState {
         public static final int PENDING = 0;
         public static final int DECLINE = 1;
         public static final int ACCEPT  = 2;
+    }
+
+    public static class TopicStatus {
+        public static final int ACCEPT  = 0;
+        public static final int PENDING = 1;
+        public static final int DECLINE = 2;
     }
 
     public static class UserRole {

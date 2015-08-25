@@ -5,6 +5,7 @@ import android.content.IntentSender;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     }
 
     public static final int MAIN_CONTENT_HOLDER = R.id.main_content;
+    private static final String TAG_FRAG_LEVEL_0 = "root_frag";
     private void onUsersClick(View v) {
         Log.d(TAG, "onUsersClick");
         Fragment oldFrag = getSupportFragmentManager().findFragmentById(MAIN_CONTENT_HOLDER);
@@ -144,10 +146,8 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
             return;
         UsersFrag frag = new UsersFrag();
         BaseFrag.Option opt = frag.generateDefaultOption();
-        opt.setPlaceHolder(MAIN_CONTENT_HOLDER);
-        opt.action = BaseFrag.Option.ACTION_REPLACE;
-        opt.addBackStack = false;
-        frag.move(getSupportFragmentManager(), frag, opt);
+        configRootFrag(opt);
+        showRootFrag(frag, opt);
     }
 
     private void onAdminClick(View v) {
@@ -157,10 +157,8 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
             return;
         AdminFrag frag = new AdminFrag();
         BaseFrag.Option opt = frag.generateDefaultOption();
-        opt.setPlaceHolder(MAIN_CONTENT_HOLDER);
-        opt.action = BaseFrag.Option.ACTION_REPLACE;
-        opt.addBackStack = false;
-        frag.move(getSupportFragmentManager(), frag, opt);
+        configRootFrag(opt);
+        showRootFrag(frag, opt);
     }
 
     private void onConferenceClick(View v) {
@@ -170,10 +168,23 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
             return;
         ConferencesFrag frag = new ConferencesFrag();
         BaseFrag.Option opt = frag.generateDefaultOption();
+        configRootFrag(opt);
+        showRootFrag(frag, opt);
+    }
+
+    private void showRootFrag(BaseFrag frag, BaseFrag.Option opt) {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStackImmediate(fm.getBackStackEntryAt(0).getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+        frag.move(fm, frag, opt);
+    }
+
+    private void configRootFrag(BaseFrag.Option opt) {
         opt.setPlaceHolder(MAIN_CONTENT_HOLDER);
         opt.action = BaseFrag.Option.ACTION_REPLACE;
         opt.addBackStack = false;
-        frag.move(getSupportFragmentManager(), frag, opt);
+        opt.backStackName = TAG_FRAG_LEVEL_0;
     }
 
     private void showSignedOutUI() {

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.TextView;
 
 import org.joda.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.lang.ref.WeakReference;
 
 import vn.minhtdh.demo.R;
 import vn.minhtdh.demo.model.Event;
+import vn.minhtdh.demo.utils.UIUtils;
 import vn.minhtdh.demo.utils.Utils;
 
 /**
@@ -22,14 +24,15 @@ public class EventFrag extends BaseFrag {
 
     public boolean editable = false;
 
-    Event event;
+    public Event event;
 
     WeakReference<TextView> mTv;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final int layoutId = editable ? R.layout.event_frag : R.layout.event_view_only;
-        View v = inflater.inflate(layoutId, container, false);
+        View v = inflater.inflate(R.layout.event_frag, container, false);
+        ViewStub stub = (ViewStub) v.findViewById(R.id.stubLocation);
+        UIUtils.inflateText(stub, editable);
         TextView tv = (TextView) v.findViewById(R.id.tvLocation);
         Utils.setText(tv, event == null ? "null" : event.location);
         mTv = new WeakReference<TextView>(tv);
@@ -43,6 +46,16 @@ public class EventFrag extends BaseFrag {
         frag.setDateTime(event == null ? LocalDateTime.now() : new LocalDateTime(event.timeEnd));
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fillData();
+    }
+
+    public void fillData() {
+        // TODO
     }
 
     public void saveData() {

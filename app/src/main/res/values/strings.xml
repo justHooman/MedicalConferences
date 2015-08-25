@@ -15,4 +15,5 @@
     <string name="tab_participants">Participants</string>
     <string name="tab_topics_request">Requested Topics</string>
     <string name="input_user_title">Enter user\'s mail</string>
+    <string name="save">Save</string>
 </resources>

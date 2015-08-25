@@ -13,14 +13,7 @@ import vn.minhtdh.demo.widget.SimpleHolder;
 /**
  * Created by exoplatform on 8/25/15.
  */
-public class UserAdapter extends CmnAdt<User, SimpleHolder> {
-
-    @Override
-    public SimpleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
-        SimpleHolder ret = new SimpleHolder(v);
-        return ret;
-    }
+public class UserAdapter extends CmnAdt.SimpleAdt<User> {
 
     @Override
     public void onBindViewHolder(SimpleHolder holder, int position) {

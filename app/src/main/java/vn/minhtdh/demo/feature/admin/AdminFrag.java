@@ -34,12 +34,11 @@ public class AdminFrag extends BaseToolBarFrag.BaseListFrag<List<Conference>> {
     }
 
     @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v.getId() == R.id.fabAdd) {
-            ConferenceDetailFrag frag = new ConferenceDetailFrag();
-            frag.mode = ConferenceDetailFrag.MODE_ADMIN;
-            move(getFragmentManager(), frag);
-        }
+    protected void onFabClick(View v) {
+        super.onFabClick(v);
+        ConferenceDetailFrag frag = new ConferenceDetailFrag();
+        frag.mode = ConferenceDetailFrag.MODE_ADMIN;
+        move(getFragmentManager(), frag);
     }
+
 }
