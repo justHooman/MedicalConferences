@@ -63,7 +63,7 @@ public abstract class BaseToolBarFrag extends BaseFrag {
             View v = inflater.inflate(getLayoutId(), container, false);
             setTitle(getTitle());
             RecyclerView rv = (RecyclerView) v.findViewById(R.id.rv);
-            rv.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, true));
+            rv.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             configureAdapter(rv);
             mRv = new WeakReference<RecyclerView>(rv);
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,6 +27,7 @@ import vn.minhtdh.demo.db.DbHelper;
 import vn.minhtdh.demo.db.DbUtils;
 import vn.minhtdh.demo.feature.admin.AdminFrag;
 import vn.minhtdh.demo.feature.conference.ConferencesFrag;
+import vn.minhtdh.demo.feature.user.UsersFrag;
 import vn.minhtdh.demo.frag.BaseFrag;
 import vn.minhtdh.demo.frag.DrawerFrag;
 import vn.minhtdh.demo.frag.ProgressFrag;
@@ -120,8 +122,11 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 }
                 showSignedOutUI();
                 break;
-            case R.id.btn_admin:
+            case R.id.btn_admin_conferences:
                 onAdminClick(v);
+                break;
+            case R.id.btn_admin_users:
+                onUsersClick(v);
                 break;
             case R.id.btn_conference:
                 onConferenceClick(v);
@@ -131,11 +136,28 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         }
     }
 
+    public static final int MAIN_CONTENT_HOLDER = R.id.main_content;
+    private void onUsersClick(View v) {
+        Log.d(TAG, "onUsersClick");
+        Fragment oldFrag = getSupportFragmentManager().findFragmentById(MAIN_CONTENT_HOLDER);
+        if (oldFrag instanceof UsersFrag)
+            return;
+        UsersFrag frag = new UsersFrag();
+        BaseFrag.Option opt = frag.generateDefaultOption();
+        opt.setPlaceHolder(MAIN_CONTENT_HOLDER);
+        opt.action = BaseFrag.Option.ACTION_REPLACE;
+        opt.addBackStack = false;
+        frag.move(getSupportFragmentManager(), frag, opt);
+    }
+
     private void onAdminClick(View v) {
         Log.d(TAG, "onAdminClick");
+        Fragment oldFrag = getSupportFragmentManager().findFragmentById(MAIN_CONTENT_HOLDER);
+        if (oldFrag instanceof AdminFrag)
+            return;
         AdminFrag frag = new AdminFrag();
         BaseFrag.Option opt = frag.generateDefaultOption();
-        opt.setPlaceHolder(R.id.main_content);
+        opt.setPlaceHolder(MAIN_CONTENT_HOLDER);
         opt.action = BaseFrag.Option.ACTION_REPLACE;
         opt.addBackStack = false;
         frag.move(getSupportFragmentManager(), frag, opt);
@@ -143,9 +165,12 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
     private void onConferenceClick(View v) {
         Log.d(TAG, "onConferenceClick");
+        Fragment oldFrag = getSupportFragmentManager().findFragmentById(MAIN_CONTENT_HOLDER);
+        if (oldFrag instanceof ConferencesFrag)
+            return;
         ConferencesFrag frag = new ConferencesFrag();
         BaseFrag.Option opt = frag.generateDefaultOption();
-        opt.setPlaceHolder(R.id.main_content);
+        opt.setPlaceHolder(MAIN_CONTENT_HOLDER);
         opt.action = BaseFrag.Option.ACTION_REPLACE;
         opt.addBackStack = false;
         frag.move(getSupportFragmentManager(), frag, opt);

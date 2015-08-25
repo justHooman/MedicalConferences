@@ -8,8 +8,11 @@
     <string name="signingin">Signing in</string>
     <string name="signout">Sign Out</string>
     <string name="admin_page">Admin Page</string>
+    <string name="users">Users</string>
     <string name="conferences">Conferences</string>
+    <string name="your_conferences">Your Conferences</string>
     <string name="tab_topics">Topics</string>
     <string name="tab_participants">Participants</string>
     <string name="tab_topics_request">Requested Topics</string>
+    <string name="input_user_title">Enter user\'s mail</string>
 </resources>

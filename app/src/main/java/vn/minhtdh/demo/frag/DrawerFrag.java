@@ -23,9 +23,9 @@ import vn.minhtdh.demo.utils.Utils;
  * Created by minhtdh on 8/23/15.
  */
 public class DrawerFrag extends BaseFrag implements View.OnClickListener {
-    WeakReference<TextView> mTvName, mTvMail, mTvRole, mBtnAdmin, mBtnConference;
+    WeakReference<TextView> mTvName, mTvMail, mTvRole, mBtnConference;
     WeakReference<ImageView> mImgAvatar;
-    WeakReference<View> mBtnSignIn, mBtnSignOut;
+    WeakReference<View> mBtnSignIn, mBtnSignOut, mBtnAdmin;
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final
@@ -46,15 +46,19 @@ public class DrawerFrag extends BaseFrag implements View.OnClickListener {
         tmp = (TextView) v.findViewById(R.id.roles);
         mTvRole = new WeakReference<TextView>(tmp);
 
-        tmp = (TextView) v.findViewById(R.id.btn_admin);
+        tmp = (TextView) v.findViewById(R.id.btn_admin_conferences);
         tmp.setOnClickListener(this);
-        mBtnAdmin = new WeakReference<TextView>(tmp);
+        tmp = (TextView) v.findViewById(R.id.btn_admin_users);
+        tmp.setOnClickListener(this);
 
         tmp = (TextView) v.findViewById(R.id.btn_conference);
         tmp.setOnClickListener(this);
         mBtnConference = new WeakReference<TextView>(tmp);
 
         View tmpV;
+        tmpV = v.findViewById(R.id.group_admin);
+        mBtnAdmin = new WeakReference<View>(tmpV);
+
         tmpV = v.findViewById(R.id.sign_in_button);
         tmpV.setOnClickListener(this);
         mBtnSignIn = new WeakReference<View>(tmpV);
@@ -109,8 +113,9 @@ public class DrawerFrag extends BaseFrag implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.sign_in_button:
             case R.id.sign_out_button:
-            case R.id.btn_admin:
             case R.id.btn_conference:
+            case R.id.btn_admin_conferences:
+            case R.id.btn_admin_users:
                 ((MainActivity) getActivity()).onClick(v);
                 break;
             default:
